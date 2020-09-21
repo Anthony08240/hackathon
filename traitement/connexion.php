@@ -18,7 +18,7 @@ if ($nbresultats == 1) {
 
     $_SESSION['mail'] = $resultat['mail'];
 
-    header('location: ../index.php?success=1');
+    header('location: ../maps.php?success=1');
 } else {
     header('location: ../index.php?success=2');
 }

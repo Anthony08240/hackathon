@@ -43,3 +43,14 @@
   }
 }
 
+/* maps */
+
+#map {
+  /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */
+  height: 800px;
+  width: 100%;
+}
+
+#map canvas {
+  position: relative !important;
+}
