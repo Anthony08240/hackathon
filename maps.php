@@ -19,6 +19,20 @@ if(isset($_GET['success'])){
         vous êtes bien connecter.
         </div></center>
 <?php }} ?>
+
+<?php 
+$reccup = $bdd->prepare('SELECT profession FROM recensement_population GROUP BY profession ORDER BY profession');
+$reccup->execute();
+echo "<div id='jobList'>";
+while ($data = $reccup->fetch()){ ?>
+
+<div><?=$data['profession']?></div>
+
+<?php }
+echo "</div>";
+
+?>
+
 <div class="map">
         <div class="row mx-0 mb-4">
             <div class="col-lg-3 col-md-2 col-sm-1 col-xs-0 col-0"></div>
@@ -36,9 +50,9 @@ if(isset($_GET['success'])){
 </body>
 </html>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-    </script>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script>
@@ -48,10 +62,23 @@ if(isset($_GET['success'])){
 	    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.0.0/build/ol.js"></script>
 
 <script>
-        function showMap() {
-            $('.blur').fadeOut();
-        }
-	</script>
+    $('#jobList > *').click(function() {
+        var job = this.innerHTML;
+        
+        $.post( "back.php", job, 
+            function( data ) {
+                console.log( data );
+            }
+        );
+
+    });
+
+
+
+    function showMap() {
+        $('.blur').fadeOut();
+    }
+</script>
 	
 	<script>
 
@@ -85,29 +112,6 @@ var UserD = {
 
 var Markers = [
 
-//     
-//     $req=$bdd->prepare("SELECT * FROM recensement_population WHERE profession = 'abbé'");
-//     $req->execute();
-//     while ($donnees = $req->fetch()){
-//         $habitant = $donnees["id_individu"];
-
-//         $req2=$bdd->prepare("SELECT * FROM histo_geo WHERE user = $habitant");
-//         $req2->execute();
-//         while ($donnees2 = $req2->fetch()){
-
-//             $LONGITUDE = $donnees2['x'];
-//             $LATITUDE = $donnees2['y'];
-//     
-//     {
-
-//         lat: ,
-
-//         lng: ,
-
-//         is_enabled: true,
-
-//     },
-//
     {
 
         lat: 49.430910,
