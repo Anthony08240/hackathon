@@ -1,8 +1,9 @@
 <?php 
 include('traitement/connectbdd.php');
 
-$job = $_POST;
+$job = $_POST['job'];
 $res = [];
+
 function convertGeo($X, $Y)
 {
     // définition des constantes
@@ -22,19 +23,17 @@ function convertGeo($X, $Y)
     return ['X' => $LONGITUDE, 'Y' => $LATITUDE];
 }
 
-foreach($job as $key => $value){
-
-    echo $key;
-$req = $bdd->prepare("  SELECT x, y 
+$req = $bdd->prepare("  SELECT x, y
                         FROM histo_geo 
                         WHERE user IN 
                         (
-                            SELECT id_individu FROM recensement_population WHERE profession = '$key'
+                            SELECT id_individu FROM recensement_population WHERE profession = :job
                         )
 ");
-$req->execute();
-while($coord = $req->fetch()){
-    
-    echo json_encode(convertGeo($coord['x'], $coord['y']));
+$req->execute([':job' => $job]);
+$coord = $req->fetchAll();
+foreach($coord as $key => $item){
+    $res[$key] = convertGeo($item['x'], $item['y']);
+}
 
-}}
+echo json_encode($res);
